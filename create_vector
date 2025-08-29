@@ -31,8 +31,8 @@ def main():
     print(f"✅ Loaded {len(texts)} chunks from texts.pkl")
 
     # Step 2: Initialize Gemini embeddings
-    GEMINI_API_KEY = "AIzaSyBVccvRRjreHH3sxuDAw-UokQhIxwHGOUQ"
-    embedding = GeminiEmbeddings(api_key="AIzaSyBVccvRRjreHH3sxuDAw-UokQhIxwHGOUQ")
+    GEMINI_API_KEY = "ENTER API KEY"
+    embedding = GeminiEmbeddings(api_key="ENTER API KEY")
 
     # Step 3: Create Chroma vector DB
     vectordb = Chroma.from_documents(texts, embedding, persist_directory="chroma_db")
@@ -44,3 +44,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
