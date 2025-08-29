@@ -8,6 +8,9 @@ https://github.com/user-attachments/assets/750ba8d3-0c85-4fd2-b174-40bb62fed807
 A lightweight Retrieval-Augmented Generation (RAG) document chatbot that lets you **chat with your Markdown files**. Built with **Gemini API + LangChain + ChromaDB**.
 
 
+This project uses the **"Alice in Wonderland"** story as a sample Markdown file to demonstrate document retrieval and querying.
+
+
 ---
 
 
