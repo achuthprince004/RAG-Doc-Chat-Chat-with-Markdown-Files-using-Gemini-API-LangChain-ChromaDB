@@ -4,7 +4,7 @@ from langchain.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 # Set your Google API Key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyCL1BkXXaWFJ2DSiXyeniINdRr-wBZfhSs"
+os.environ["GOOGLE_API_KEY"] = "GEMINI API KEY"
 
 # Load saved chunks
 with open("texts.pkl", "rb") as f:
@@ -41,3 +41,4 @@ while True:
 
     response = llm.invoke(prompt)
     print("\n🤖 Gemini Answer:", response.content)
+
