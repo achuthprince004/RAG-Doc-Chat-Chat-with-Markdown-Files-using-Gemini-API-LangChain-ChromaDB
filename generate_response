@@ -1,0 +1,43 @@
+import os
+import pickle
+from langchain.vectorstores import Chroma
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+
+# Set your Google API Key
+os.environ["GOOGLE_API_KEY"] = "AIzaSyCL1BkXXaWFJ2DSiXyeniINdRr-wBZfhSs"
+
+# Load saved chunks
+with open("texts.pkl", "rb") as f:
+    texts = pickle.load(f)
+
+# Load embeddings + Chroma vector DB
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+vectordb = Chroma(persist_directory="chroma_db", embedding_function=embeddings)
+
+# Initialize Gemini chat model
+llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash")
+
+# Simple retrieval + answer loop
+while True:
+    query = input("\nEnter your question (or type 'exit'): ")
+    if query.lower() == "exit":
+        break
+
+    # Get top 3 matching chunks
+    docs = vectordb.similarity_search(query, k=3)
+
+    context = "\n\n".join([doc.page_content for doc in docs])
+
+    prompt = f"""
+    You are a helpful assistant. Use the following context to answer the question.
+    If the answer is not in the context, say "I could not find this in the document."
+
+    Context:
+    {context}
+
+    Question: {query}
+    Answer:
+    """
+
+    response = llm.invoke(prompt)
+    print("\n🤖 Gemini Answer:", response.content)

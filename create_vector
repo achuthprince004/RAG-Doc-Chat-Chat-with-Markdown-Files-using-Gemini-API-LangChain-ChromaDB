@@ -1,0 +1,46 @@
+import pickle
+import google.generativeai as genai
+from langchain.vectorstores import Chroma
+from langchain.embeddings.base import Embeddings
+
+# ---- Gemini Embeddings Wrapper for LangChain ----
+class GeminiEmbeddings(Embeddings):
+    def __init__(self, api_key: str, model: str = "models/embedding-001"):
+        genai.configure(api_key=api_key)
+        self.model = model
+
+    def embed_documents(self, texts):
+        """Embed a list of documents using Gemini embeddings."""
+        embeddings = []
+        for text in texts:
+            result = genai.embed_content(model=self.model, content=text)
+            embeddings.append(result["embedding"])
+        return embeddings
+
+    def embed_query(self, text):
+        """Embed a single query using Gemini embeddings."""
+        result = genai.embed_content(model=self.model, content=text)
+        return result["embedding"]
+
+
+# ---- Main Script ----
+def main():
+    # Step 1: Load chunks from pickle file
+    with open("texts.pkl", "rb") as f:
+        texts = pickle.load(f)
+    print(f"✅ Loaded {len(texts)} chunks from texts.pkl")
+
+    # Step 2: Initialize Gemini embeddings
+    GEMINI_API_KEY = "AIzaSyBVccvRRjreHH3sxuDAw-UokQhIxwHGOUQ"
+    embedding = GeminiEmbeddings(api_key="AIzaSyBVccvRRjreHH3sxuDAw-UokQhIxwHGOUQ")
+
+    # Step 3: Create Chroma vector DB
+    vectordb = Chroma.from_documents(texts, embedding, persist_directory="chroma_db")
+
+    # Step 4: Persist DB to disk
+    vectordb.persist()
+    print("💾 Vector database created and saved at 'chroma_db'")
+
+
+if __name__ == "__main__":
+    main()
